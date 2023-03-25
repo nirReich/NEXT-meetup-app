@@ -1,11 +1,16 @@
+import Head from "next/head";
 import { MongoClient } from "mongodb";
 import MeetupList from "@/components/meetups/MeetupList";
 
 function HomePage({ meetups }) {
   return (
-    <div>
+    <>
+      <Head>
+        <title>NEXT Meetups</title>
+        <meta name="description" content="Small meetups app for NEXT.JS practice"/>
+      </Head>
       <MeetupList meetups={meetups} />
-    </div>
+    </>
   );
 }
 
