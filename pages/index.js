@@ -26,7 +26,7 @@ function HomePage({ meetups }) {
 }
 
 export async function getStaticProps() {
-  // do something
+  // mongo password: JGapngNZkjt1vjhu
   return {
     props: {
       meetups: dummy_data,
