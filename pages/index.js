@@ -1,21 +1,5 @@
+import { MongoClient } from "mongodb";
 import MeetupList from "@/components/meetups/MeetupList";
-
-const dummy_data = [
-  {
-    id: "m1",
-    image:
-      "https://i0.wp.com/www.touristisrael.com/wp-content/uploads/2021/01/Tel-Aviv-Travel.jpg?fit=2000%2C1381&ssl=1",
-    title: "Tel-Aviv meet 1",
-    address: "some address, israel",
-  },
-  {
-    id: "m2",
-    image:
-      "https://i0.wp.com/www.touristisrael.com/wp-content/uploads/2021/01/Tel-Aviv-Travel.jpg?fit=2000%2C1381&ssl=1",
-    title: "Tel-Aviv meet 2",
-    address: "some address, israel 2",
-  },
-];
 
 function HomePage({ meetups }) {
   return (
@@ -26,12 +10,24 @@ function HomePage({ meetups }) {
 }
 
 export async function getStaticProps() {
-  // mongo password: JGapngNZkjt1vjhu
+  const client = await MongoClient.connect(
+    "mongodb+srv://nir:7281161@meetups.7fwfjef.mongodb.net/?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+
+  const meetupCollection = db.collection("meetups");
+  const meetups = await meetupCollection.find().toArray();
+  client.close();
   return {
     props: {
-      meetups: dummy_data,
+      meetups: meetups.map((meetup)=>({
+        title:meetup.title,
+        address:meetup.address,
+        image:meetup.image,
+        id:meetup._id.toString()
+      })),
     },
-    revalidate: 10,
+    revalidate: 1,
   };
 }
 
